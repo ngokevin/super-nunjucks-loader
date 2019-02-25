@@ -1,6 +1,6 @@
 {
   "name": "super-nunjucks-loader",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Nunjucks loader for Webpack.",
   "main": "index.js",
   "repository": {
