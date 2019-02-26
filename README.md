@@ -52,3 +52,12 @@ const htmlString = require('./index.html');
 
 Personally, I am using it as an intermediary step alongside another loader that
 injects the HTML to document.body.
+
+#### Hot Reload Markers
+
+This loader will scan and mark includes in case loaders down the chain want to use to enable hot reloading. Includes will be printed as HTML comments:
+
+```html
+<!-- <includes>templates/foo.html, bar.html<end-includes> -->
+<!-- <include-root>/Users/doe/my-project/src/<end-include-root> -->
+```
