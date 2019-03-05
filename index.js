@@ -9,6 +9,8 @@ module.exports = function (source) {
   const options = getOptions(this);
   options.options = options.options || {};
   options.options.noCache = true;
+
+  // Set up Nunjucks.
   const nunjucks = Nunjucks.configure(options.path, options.options);
 
   // Add globals.
@@ -16,18 +18,13 @@ module.exports = function (source) {
     nunjucks.addGlobal(global, options.globals[global]);
   }
 
-  // Store includes in case future loaders want to support HMR and get Webpack to watch
-  // for changes using require.
+  // Add dependencies with includes.
   let includes = getIncludes(path.dirname(this.resourcePath), source);
-  includes = includes.filter(uniq).map(include => {
-    return './' + path.relative(options.path, include);
+  includes = includes.filter(uniq).forEach(include => {
+    this.addDependency(path.resolve(options.path, include));
   });
 
-  // Add include markers.
-  const includeRootMarker = `\n<!-- <include-root>${options.path}<end-include-root> -->`;
-  const includesMarker = `\n<!-- <includes>${includes.join(',')}<end-includes> -->`;
-
-  return nunjucks.renderString(source, options.context) + includesMarker + includeRootMarker;
+  return nunjucks.renderString(source, options.context);
 };
 
 function getIncludes (templatePath, source) {
